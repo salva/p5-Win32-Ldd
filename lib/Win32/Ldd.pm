@@ -15,22 +15,24 @@ our @ISA = qw(Exporter);
 # This allows declaration	use Win32::Ldd ':all';
 # If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
 # will save memory.
-our %EXPORT_TAGS = ( 'all' => [ qw(
-	
-) ] );
 
-our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
-
-our @EXPORT = qw(
-	
-);
+our @EXPORT_OK = qw(build_dep_tree);
+our @EXPORT = qw();
 
 our $VERSION = '0.01';
 
 require XSLoader;
 XSLoader::load('Win32::Ldd', $VERSION);
 
-# Preloaded methods go here.
+use File::Spec;
+
+sub build_dep_tree {
+    my ($pe_file, %opts) = @_;
+    _build_dep_tree(File::Spec->canonpath($pe_file),
+                    $opts{search_paths} // [split /;/, $ENV{PATH}],
+                    $opts{data_relocs} // 0,
+                    $opts{function_relocs} // 0);
+}
 
 1;
 __END__
