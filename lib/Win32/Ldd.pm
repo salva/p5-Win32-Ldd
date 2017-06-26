@@ -1,88 +1,113 @@
 package Win32::Ldd;
 
-use 5.024001;
+our $VERSION = '0.01';
+
+use 5.010;
 use strict;
 use warnings;
 
 require Exporter;
-
 our @ISA = qw(Exporter);
 
-# Items to export into callers namespace by default. Note: do not export
-# names by default without a very good reason. Use EXPORT_OK instead.
-# Do not simply export all your public functions/methods/constants.
-
-# This allows declaration	use Win32::Ldd ':all';
-# If you do not need this, moving things directly into @EXPORT or @EXPORT_OK
-# will save memory.
-
-our @EXPORT_OK = qw(build_dep_tree);
+our @EXPORT_OK = qw(pe_dependencies);
 our @EXPORT = qw();
-
-our $VERSION = '0.01';
 
 require XSLoader;
 XSLoader::load('Win32::Ldd', $VERSION);
 
 use File::Spec;
 
-sub build_dep_tree {
+sub pe_dependencies {
     my ($pe_file, %opts) = @_;
-    _build_dep_tree(File::Spec->canonpath($pe_file),
-                    $opts{search_paths} // [split /;/, $ENV{PATH}],
-                    $opts{data_relocs} // 0,
-                    $opts{function_relocs} // 0);
+    build_dep_tree(File::Spec->canonpath($pe_file),
+                   $opts{search_paths} // [split /;/, $ENV{PATH}],
+                   $opts{recursive} // 1,
+                   $opts{data_relocs} // 0,
+                   $opts{function_relocs} // 0);
 }
 
 1;
 __END__
-# Below is stub documentation for your module. You'd better edit it!
 
 =head1 NAME
 
-Win32::Ldd - Perl extension for blah blah blah
+Win32::Ldd - Track dependencies for Windows EXE and DLL PE-files
 
 =head1 SYNOPSIS
 
-  use Win32::Ldd;
-  blah blah blah
+  use Win32::Ldd qw(pe_dependencies);
+
+  my $dep_tree = pe_dependencies('c:\\strawberry\\perl\\bin\\perl.exe');
 
 =head1 DESCRIPTION
 
-Stub documentation for Win32::Ldd, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+This module is an XS wrapper for the
+L<https://github.com/LRN/ntldd|ntldd> library.
 
-Blah blah blah.
+It can inspect Windows PE files and extract information about its
+dependencies.
 
-=head2 EXPORT
+=head2 FUNCTIONS
 
-None by default.
+The following function can be imported from the module:
 
+=over 4
 
+=item $dep_tree = pe_dependencies($filename, %opts);
+
+This function returns a tree of hashes representing the dependencies
+of the module.
+
+The options accepted by the function are as follows:
+
+=over 4
+
+=item search_paths => \@path
+
+Where to look for DLLs. Defaults to the directories in C<$ENV{PATH}>.
+
+=item recursive => $bool
+
+Indicates whether resolved dependencies should also be inspected for
+its own dependencies. Defaults to true.
+
+=item data_reloc => $bool
+
+unknown!
+
+=item function_reloc => $bool
+
+unknown!
+
+=back
+
+=back
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
+The L<https://github.com/LRN/ntldd|ntldd> project.
 
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
-
-=head1 AUTHOR
-
-Salvador Fandiño, E<lt>salva@E<gt>
+Other tools providing similar features are the Freeware
+L<http://dependencywalker.com/|DependencyWalker> (aka C<depends.exe>),
+or the C<objdump.exe> utility (included with Strawberry Perl).
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2017 by Salvador Fandiño
+Copyright (C) 2017 by Salvador FandiE<ntilde>o E<lt>sfandino@yahoo.comE<gt>.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.24.1 or,
-at your option, any later version of Perl 5 you may have available.
+Copyright (C) 2010-2016 LRN E<lt>lrn1986@gmail.comE<gt>
 
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at
+your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 =cut

@@ -62,7 +62,7 @@ sv2SearchPaths(SV *sv) {
 static struct DepTreeElement *
 build_dep_tree(char *pe_file,
                SearchPaths *search_paths,
-               int datarelocs, int functionrelocs) {
+               int datarelocs, int recursive, int functionrelocs) {
     /* warn("build_dep_tree(%s, %p, %d, %d)", pe_file, search_paths, datarelocs, functionrelocs); */
     struct DepTreeElement root;
     memset(&root, 0, sizeof(root));
@@ -81,6 +81,7 @@ build_dep_tree(char *pe_file,
     cfg.machineType = -1;
     cfg.on_self = 0;
     cfg.datarelocs = datarelocs;
+    cfg.recursive = recursive,
     cfg.functionrelocs = functionrelocs;
     cfg.stack = &stack;
     cfg.stack_len = &stack_len;
@@ -235,13 +236,13 @@ BOOT:
 
 
 SV *
-_build_dep_tree(char *pe_file, SearchPaths *search_paths, int datarelocs, int functionrelocs)
+build_dep_tree(char *pe_file, SearchPaths *search_paths, int datarelocs, int recursive, int functionrelocs)
 PREINIT:
     struct DepTreeElement *deps;
 CODE:
     dTARG;
     /* warn("calling build_dep_tree"); */
-    deps = build_dep_tree(pe_file, search_paths, datarelocs, functionrelocs);
+deps = build_dep_tree(pe_file, search_paths, datarelocs, recursive, functionrelocs);
     /* warn("build_dep_tree is back: %p", deps); */
     if (deps == NULL) {
         Perl_croak(aTHX_ "BuildDepTree failed");

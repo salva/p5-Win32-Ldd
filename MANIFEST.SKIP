@@ -1,0 +1,15 @@
+\.stackdump$
+\.bs$
+\.def$
+\.o$
+\bLdd\.c$
+\.old$
+\bout$
+\.tar\.gz$
+~$
+^\.git\b
+^blib\b
+^pm_to_blib$
+^MYMETA\.
+\.bak$
+^MANIFEST.SKIP$
