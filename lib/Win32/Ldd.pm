@@ -1,6 +1,6 @@
 package Win32::Ldd;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use 5.010;
 use strict;
@@ -42,7 +42,7 @@ Win32::Ldd - Track dependencies for Windows EXE and DLL PE-files
 =head1 DESCRIPTION
 
 This module is an XS wrapper for the
-L<https://github.com/LRN/ntldd|ntldd> library.
+L<ntldd|https://github.com/LRN/ntldd> library.
 
 It can inspect Windows PE files and extract information about its
 dependencies.
@@ -85,10 +85,10 @@ unknown!
 
 =head1 SEE ALSO
 
-The L<https://github.com/LRN/ntldd|ntldd> project.
+The L<ntldd|https://github.com/LRN/ntldd> project.
 
 Other tools providing similar features are the Freeware
-L<http://dependencywalker.com/|DependencyWalker> (aka C<depends.exe>),
+L<DependencyWalker|http://dependencywalker.com/> (aka C<depends.exe>),
 or the C<objdump.exe> utility (included with Strawberry Perl).
 
 =head1 COPYRIGHT AND LICENSE
@@ -108,6 +108,6 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+along with this program.  If not, see L<http://www.gnu.org/licenses/>.
 
 =cut
