@@ -4,7 +4,6 @@ Ldd.xs
 lib/Win32/Ldd.pm
 libntldd.c
 libntldd.h
-Makefile
 Makefile.PL
 MANIFEST
 mymemory.h
