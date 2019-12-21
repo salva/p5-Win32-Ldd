@@ -11,6 +11,11 @@ WriteMakefile( NAME              => 'Win32::Ldd',
                LIBS              => ['-limagehlp'],
                DEFINE            => '',
                INC               => '-I.',
-               OBJECT            => '$(O_FILES)' );
+               OBJECT            => '$(O_FILES)',
+               META_MERGE => {
+                   resources => {
+                       repository => 'https://github.com/salva/p5-Win32-Ldd',
+                   },
+               });
 
 
